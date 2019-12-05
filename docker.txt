@@ -216,6 +216,8 @@ vi file.txt
 git add file.txt
 git commit -m”adding test3.txt” 
 git merge <branch_name>
-
+delete a branch
+#git branch -D <branchname>
+#git push origin --delete <branchname>
 
 
