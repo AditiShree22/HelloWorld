@@ -1,0 +1,221 @@
+All steps in root
+
+1: Update Software Repositories
+#sudo apt-get update
+Allow the operation to complete.
+
+2: Uninstall Old Versions of Docker
+#sudo apt-get remove docker docker-engine docker.io
+
+3: Install Docker
+#sudo apt install docker.io
+
+4: Start and Automate Docker
+#sudo systemctl start docker
+#sudo systemctl enable docker
+
+5:Verify that it's running:
+#systemctl status docker
+
+6:To verify the installed Docker version number, enter:
+#docker --version
+
+7:To check whether you can access and download images from Docker Hub, type:
+#docker run hello-world
+
+8:To search images on docker hub
+#docker search ubuntu
+
+9:To download image from docker hub
+#docker run ubuntu
+
+10: To check images available on your system
+#docker images
+
+11: To run downloaded image as a container
+#docker run -it ubuntu
+
+12: To install any image inside running container
+#apt-get update
+#apt-get install mariadb-server
+
+optional 
+ : To remove container from docker
+#docker container rm containerId
+
+13:To save the state of the container as a new image, first exit from it:
+#exit
+
+14: commit the changes to a new Docker image instance
+(docker commit -m "What did you do to the image" -a "Author Name" container-id repository/new_image_name)
+#docker commit -m "added mariadb-server" -a "author" 59839a1b7de2 root/ubuntu-mariadb
+
+Now this new image should be added locally To check:
+#docker images
+
+15:To view the active container and their id, use:
+#docker ps
+
+16:To view all containers  active and inactive, pass it the -a switch:
+#docker ps -a
+
+17:To view the latest container you created, pass it the -l switch:
+#docker ps -l
+
+18: Stopping a running or active container is as simple as typing:
+#docker stop container-id
+
+
+-----------------------------
+
+
+
+
+--------------------------
+DOCKER SWARM
+--------------------------
+#sudo apt-get install docker.io
+#sudo systemctl start docker
+#sudo systemctl enable docker
+# vi /etc/hosts
+192.168.1.103  manager
+192.168.1.107  worker
+#hostnamectl set-hostname worker
+#exit;
+#sudo su
+#cat /etc/hostname
+#ping worker
+# ping 192.168.1.107
+
+-----OPTIONAL
+	# apt-get update
+	# apt-get install apt-transport-https ca-certificates curl software-properties-common -y
+	#curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+	#add-apt-repository "deb [arch=amd64]
+
+----MANDATORY
+#usermod -aG docker <username>
+#docker swarm init --advertise-addr <manager node IP address> 
+------TROUBLESHOOT ----#sudo ufw disable
+#docker swarm join --token <TOKEN_SENT_BY_MASTER>
+#docker node ls
+TO add new managaer
+#docker swarm join-token manager
+TO add new worker
+#docker swarm join-token worker
+TO leave swarm
+#docker swarm leave
+
+------------------------------
+DOCKER SWARM SERVICE 
+-----------------------------
+#docker service create --name myNginxServer --publish 8081:80 --replicas 2 nginx
+#docker service ls
+#docker service ps myNginxServer
+#curl http://<IP_of_manager>:8081
+#docker service scale myNginxServer=5
+--checking
+#docker service ls
+#docker service ps myNginxServer
+#docker service inspect myNginxServer
+
+--------------------------
+CUSTOM DOCKER IMAGE
+--------------------------
+#go to root
+#mkdir my_build
+#cd my_build
+#vi dockerfile
+
+FROM ubuntu:latest
+RUN apt-get -y update
+RUN apt-get -y install gcc
+ADD . /home
+WORKDIR /home
+RUN gcc test.c
+or
+RUN gcc -o test test.c
+CMD ["./a.out"]
+or 
+CMD ["./test"]
+#vi test.c
+
+write c code
+
+#from same dir 
+#docker build . -t <your_image_name>
+#docker images
+#docker run -it <image_name>
+
+------------------------
+JENKINS
+------------------------
+Go to root
+1. Add key
+	#wget -q -O - https://pkg.jenkins.io/debian/jenkins-ci.org.key | sudo apt-key add -
+2. Append debian
+	#echo deb http://pkg.jenkins.io/debian-stable binary/| sudo tee /etc/apt/sources.list.d/jenkins.list
+3. get update
+	#sudo apt-get update
+4.INSTALL JDK
+	#sudo apt install openjdk-8-jre
+5. Install Jenkins ,including Java
+	#sudo apt-get install jenkins
+6.TROUBLESHOOT----
+	Kill the process if lock is causing problem in installation
+	#sudo rm /var/lib/apt/lists/lock
+	or 
+	give more RAM and CORE to your VM
+7.TROUBLESHOOT----
+	If jenkins get corrupted
+	#sudo apt-get purge jenkins
+8.To Turn off firewall
+ 	#sudo ufw disable
+ 9.start Jenkins :
+	#sudo systemctl start jenkins
+	#sudo systemctl status jenkins
+10.Setting up
+	#ifconfig
+	Browser ---http://ip_address_or_domain_name:8080
+	or localhost:8080
+11.display the password :
+	#sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+12. Install suggested plugins
+13. Create user save and finish
+14. Star using jenkins---dashboard
+15. New Item -->Item name -->Freestyle project-->OK--->Description(optional)-->Git hub project--> <url of repo without .git> --->Src code mgmt -->Git--->Repo url--->Add branch (optional)--->Buil triggers--->Build periodically(optional */1 * * * *)--->Github GITScm---->Build--->Execute shell-->enter commands--->save
+16. Build now 
+17. Build history--->job -->console output
+
+
+-------------------
+GIT
+--------------------
+sudo apt-get install git-core
+git --version
+git config --global user.name "Jerry Mouse"
+git config --global user.email jerry@abc.com
+git config --global branch.autosetuprebase always
+git config --global color.ui true
+git config --list
+git init 
+git status 
+vi newfile.txt
+git add <directory>
+or
+git add <file>G
+git add -A
+git commit -m“<message>”
+git remote add origin <link of your central repository>
+git push -u origin master
+		git push <remote> 
+git branch
+git branch <branch-name>
+git checkout <branch_name> 
+vi file.txt
+git add file.txt
+git commit -m”adding test3.txt” 
+git merge <branch_name>
+
+
+
